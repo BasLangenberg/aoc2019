@@ -9,49 +9,17 @@ import (
 )
 
 func main() {
+	var result int
+
 	f, err := os.Open("input.txt")
 	if err != nil {
 		fmt.Errorf("Unable to open file")
 	}
-	i := day1(f)
-	fuelforfuel(i)
-}
-
-// Te laag: 1681920
-// Te laag: 1681921
-// Te laag: 1681921
-// NOK:     5045850
-
-func fuelforfuel(i int) int {
-	fmt.Println(i)
-
-	mass := i
-	fuel := 0
-	for {
-		if mass <= 2 {
-			break
-		}
-
-		mass = (mass / 3) - 2
-		if mass > 0 {
-			fuel += mass
-		}
-		fmt.Println(mass)
-	}
-
-	fmt.Println(fuel + i)
-	return fuel + i
-}
-
-func day1(f *os.File) int {
 
 	reader := bufio.NewReader(f)
 
-	var result int
-
 	for {
 		line, _, err := reader.ReadLine()
-
 		if err == io.EOF {
 			break
 		}
@@ -61,11 +29,37 @@ func day1(f *os.File) int {
 			fmt.Errorf("Unable to parse input %s", line)
 		}
 
-		result += (input / 3) - 2
+		mod := moduleFuel(input)
+		fuel := fuelFuel(mod)
+		result += mod + fuel
 	}
 
-	fmt.Println(result)
+	fmt.Printf("Total fuel for modules and fuel: %d", result)
+}
 
-	return result
+// Te laag: 1681920
+// Te laag: 1681921
+// Te laag: 1681921
+// NOK:     5045850
+// NOK:     4485007
 
+func fuelFuel(i int) int {
+	var fuelAmount int
+
+	for {
+		if i <= 0 {
+			break
+		}
+
+		i = (i / 3) - 2
+		if i > 0 {
+			fuelAmount += i
+		}
+	}
+
+	return fuelAmount
+}
+
+func moduleFuel(num int) int {
+	return (num / 3) - 2
 }
