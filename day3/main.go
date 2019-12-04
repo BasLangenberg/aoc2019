@@ -18,7 +18,9 @@ type coord struct {
 type coords []coord
 
 func main() {
-	fmt.Println(intersect(wire1, wire2))
+	ints := intersects(wire1, wire2)
+	fmt.Println(closest(ints))
+	fmt.Println(getShortestPath(ints, parseCoords(wire1), parseCoords(wire2)))
 }
 
 // Abs returns the absolute value of an integer
@@ -29,8 +31,7 @@ func Abs(x int) int {
 	return x
 }
 
-func intersect(wire1 string, wire2 string) int {
-	result := math.MaxInt32
+func intersects(wire1 string, wire2 string) coords {
 	cwire1 := parseCoords(wire1)
 	cwire2 := parseCoords(wire2)
 	var cross coords
@@ -43,7 +44,13 @@ func intersect(wire1 string, wire2 string) int {
 		}
 	}
 
-	for _, sects := range cross {
+	return cross
+}
+
+func closest(crds coords) int {
+	result := math.MaxInt32
+
+	for _, sects := range crds {
 		dist := Abs(sects.x) + Abs(sects.y)
 		if result > dist {
 			result = dist
@@ -89,4 +96,34 @@ func parseCoords(wire string) coords {
 	}
 
 	return crds
+}
+
+func getShortestPath(ints coords, wire1 coords, wire2 coords) int {
+	result := math.MaxInt32
+	for _, point := range ints {
+		var wire1Steps int
+		var wire2Steps int
+
+		for _, p := range wire1 {
+			wire1Steps++
+			if point.x == p.x && point.y == p.y {
+				break
+			}
+		}
+
+		for _, p := range wire2 {
+			wire2Steps++
+			if point.x == p.x && point.y == p.y {
+				break
+			}
+		}
+
+		totalSteps := wire1Steps + wire2Steps
+
+		if totalSteps < result {
+			result = totalSteps
+		}
+
+	}
+	return result
 }
