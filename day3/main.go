@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -38,7 +37,7 @@ func intersect(wire1 string, wire2 string) int {
 
 	for _, crds1 := range cwire1 {
 		for _, crds2 := range cwire2 {
-			if reflect.DeepEqual(crds1, crds2) {
+			if crds1.x == crds2.x && crds1.y == crds2.y {
 				cross = append(cross, crds1)
 			}
 		}
