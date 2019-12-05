@@ -45,11 +45,6 @@ func compute(input []int) int {
 		var d int
 
 		switch len(intCode) {
-		case 3:
-			a = 0
-			b = 0
-			c, _ = strconv.Atoi(string(intCode[0]))
-			d, _ = strconv.Atoi(string(intCode[1:]))
 		case 4:
 			a = 0
 			b, _ = strconv.Atoi(string(intCode[0]))
@@ -63,6 +58,7 @@ func compute(input []int) int {
 		case 1, 2:
 			d = input[stepper]
 		default:
+			fmt.Println(intCode)
 			panic("Stuff is not ok. CHeck input")
 		}
 
@@ -83,7 +79,7 @@ func compute(input []int) int {
 			}
 			if c == 0 {
 				input[input[stepper+3]] = s1 + s2
-			} else if a == 1 {
+			} else if c == 1 {
 				input[stepper+3] = s1 + s2
 			}
 
@@ -104,7 +100,7 @@ func compute(input []int) int {
 			}
 			if c == 0 {
 				input[input[stepper+3]] = s1 * s2
-			} else if a == 1 {
+			} else if c == 1 {
 				input[stepper+3] = s1 * s2
 			}
 			stepper += 4
@@ -125,8 +121,8 @@ func compute(input []int) int {
 		case 99:
 			break
 		default:
-			// fmt.Printf("No op code? %d\n", d)
-			stepper++
+			fmt.Printf("No op code? %d\n", d)
+			panic("DJSKDJS")
 		}
 
 	}
