@@ -127,6 +127,7 @@ func NewIntCode(input string) (IntCode, error) {
 
 // ParseNextInstruction parses the instruction found at pointer location in program array
 func (ic *IntCode) ParseNextInstruction() {
+	ic.param1, ic.param2, ic.param3 = false, false, false
 	pointerValue := ic.program[ic.pointer]
 	ic.instruction = pointerValue % 100
 	if pointerValue > 10000 {
