@@ -16,7 +16,7 @@ type IntCode struct {
 	instruction            int
 }
 
-func main(){
+func main() {
 	vm, _ := NewIntCode(input)
 	vm.Run()
 }
@@ -67,7 +67,7 @@ func (ic *IntCode) Run() {
 			fmt.Printf("Output: %v\n", s1)
 			ic.pointer += 2
 		case 99:
-			fmt.Println("Program exitting")
+			fmt.Println("Program exiting")
 			break
 		default:
 			ic.printOp()
@@ -84,7 +84,7 @@ func (ic *IntCode) parseMem() (int, int, int) {
 		as1 = 0
 		s1 = ic.program[ic.pointer+1]
 	} else {
-		as1 = ic.program[ic.pointer+1]
+		as1 = Abs(ic.program[ic.pointer+1])
 		s1 = ic.program[as1]
 	}
 
@@ -92,15 +92,15 @@ func (ic *IntCode) parseMem() (int, int, int) {
 		as2 = 0
 		s2 = ic.program[ic.pointer+2]
 	} else {
-		as2 = ic.program[ic.pointer+2]
+		as2 = Abs(ic.program[ic.pointer+2])
 		s2 = ic.program[as2]
 	}
 
 	if ic.param3 {
-		as3 = ic.program[ic.pointer+3]
+		as3 = 0
 		s3 = ic.program[as3]
 	} else {
-		as3 = 0
+		as3 = Abs(ic.program[ic.pointer+3])
 		s3 = ic.program[ic.pointer+3]
 	}
 
@@ -127,24 +127,25 @@ func NewIntCode(input string) (IntCode, error) {
 
 // ParseNextInstruction parses the instruction found at pointer location in program array
 func (ic *IntCode) ParseNextInstruction() {
+	ic.param1, ic.param2, ic.param3 = false, false, false
 	pointerValue := ic.program[ic.pointer]
 	ic.instruction = pointerValue % 100
 	if pointerValue > 10000 {
-		ic.param1 = true
+		ic.param3 = true
 		pointerValue -= 10000
 		if pointerValue > 1000 {
 			ic.param2 = true
 			pointerValue -= 1000
 			if pointerValue > 100 {
-				ic.param3 = true
+				ic.param1 = true
 			}
 		}
 	}
 	if pointerValue > 1000 {
-		ic.param1 = true
+		ic.param2 = true
 		pointerValue -= 1000
 		if pointerValue > 100 {
-			ic.param2 = true
+			ic.param1 = true
 		}
 	}
 	if pointerValue > 100 {
@@ -162,4 +163,11 @@ func parseIntArrayFromString(input string) ([]int, error) {
 		arr = append(arr, conv)
 	}
 	return arr, nil
+}
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
