@@ -26,6 +26,7 @@ func (ic *IntCode) printOp() {
 }
 
 // Run starts the program loaded in the IntCode VM
+// TODO Figure out if instruction pointer is modified
 func (ic *IntCode) Run() {
 	for {
 		if ic.instruction == 99 {
@@ -66,6 +67,38 @@ func (ic *IntCode) Run() {
 			}
 			fmt.Printf("Output: %v\n", s1)
 			ic.pointer += 2
+		case 5:
+			s1, s2, _ := ic.parseMem()
+			if Abs(s1) > 0 {
+				ic.pointer = s2
+			}
+			if Abs(s1) <= 0 {
+				ic.pointer += 3
+			}
+		case 6:
+			s1, s2, _ := ic.parseMem()
+			if Abs(s1) == 0 {
+				ic.pointer = s2
+			}
+			if Abs(s1) <= 0 {
+				ic.pointer += 3
+			}
+		case 7:
+			s1, s2, s3 := ic.parseMem()
+			if s1 < s2 {
+				ic.program[s3] = 1
+			}
+			if s1 >= s2 {
+				ic.program[s3] = 0
+			}
+		case 8:
+			s1, s2, s3 := ic.parseMem()
+			if s1 == s2 {
+				ic.program[s3] = 1
+			}
+			if s1 != s2 {
+				ic.program[s3] = 0
+			}
 		case 99:
 			fmt.Println("Program exiting")
 			break
